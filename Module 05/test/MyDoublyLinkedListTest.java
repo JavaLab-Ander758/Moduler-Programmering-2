@@ -1,5 +1,0 @@
-mport static org.junit.jupiter.api.Assertions.*;
-
-class MyDoublyLinkedListTest {
-
-}

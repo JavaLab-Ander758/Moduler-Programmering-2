@@ -1,2 +1,0 @@
-ublic class MyDoublyLinkedList {
-}
