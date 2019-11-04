@@ -1,5 +1,7 @@
 package Del_02;
 
+import javafx.scene.control.skin.SliderSkin;
+
 import java.util.*;
 
 public class MyHashMap<K extends Comparable, V extends Comparable> implements MyMap<K, V> {
@@ -35,18 +37,9 @@ public class MyHashMap<K extends Comparable, V extends Comparable> implements My
   /** Add an entry (key, value) into the map */
   @Override
   public V put(K key, V value) {
-    // Replace old value if key is a duplicate
-    if (get(key) != null) {
-      for (Entry<K, V> entry : entries()) {
-        V oldValue = entry.getValue();
-        entry.setValue(value);
-        return oldValue;
-      }
-    }
+    // Allow for duplicate values in a key
 
-
-
-    // Rehash the table if there is too big of an load
+    // Rehash the table if there is too big of a load
     if (size >= capacity * loadFactorThreshold) {
       rehash();
     }
@@ -59,25 +52,42 @@ public class MyHashMap<K extends Comparable, V extends Comparable> implements My
       table.set(index, new LinkedList<>());
     }
 
+
     // Add an entry (key, value) to hashTable[index]
-    table.get(index).add(new Entry<>(key, value));
+    //table.get(index).add(new Entry<>(key, value));
+    table.get(index).add(new MyMap.Entry<K, V>(key, value));
     size++;
 
     return value;
+
+    /*
+    // Replace old value if key is a duplicate
+    if (get(key) != null) {
+      for (Entry<K, V> entry : entries()) {
+        V oldValue = entry.getValue();
+        entry.setValue(value);
+        return oldValue;
+      }
+    }
+    */
   }
 
   /** Remove the entries for the specified key */
   @Override
   public void remove(K key) {
-    LinkedList<Entry<K, V>> list = table.get(hash(key.hashCode()));
+    int index = hash(key.hashCode());
 
-    if (list == null) {
+    // Make the list to traverse in
+    LinkedList<Entry<K, V>> bucket = table.get(index);
+
+    // If bucket is empty, return
+    if (bucket == null || bucket.size() == 0)
       return;
-    }
 
-    for (Entry<K, V> entry : list) {
+    // Remove all instances of within this bucket
+    for (Entry<K, V> entry : bucket) {
       if (entry.getKey().equals(key)) {
-        list.remove(entry);
+        bucket.remove(entry);
         size--;
       }
     }
