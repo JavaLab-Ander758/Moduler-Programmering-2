@@ -35,7 +35,7 @@ class FizzBuzzTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "NumbersThatAreNotDividableByThreeAndFive.csv")
+    @CsvFileSource(resources = "NumbersThatAreNotDividableByThreeOrFive.csv")
     void of_ReturnsNumberAsStringIfNotDividableByThreeOrFive(int number) {
         assertEquals(Integer.toString(number), fizzBuzz.of(number));
     }
