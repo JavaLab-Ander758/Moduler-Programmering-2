@@ -5,35 +5,37 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MyHashMapTest {
-
     @Test
-    void put_AllowsDuplicates() {
-        MyHashMap myHashMap = new MyHashMap();
-        myHashMap.put("foo", "AAA");
-        myHashMap.put("foo", "BBB");
-        myHashMap.put("foo", "CCC");
+    void put_AllowsDuplicatesWithSameHashCode() {
+        MyHashMap<String, String> myHashMap = new MyHashMap<>();
+        myHashMap.put("Foo", "AAAA");
+        myHashMap.put("Foo", "BBBB");
+        myHashMap.put("Foo", "CCCC");
 
-        HashSet<String> hashSet = new HashSet<>(Arrays.asList("AAA", "BBB", "CCC"));
-        assertEquals(myHashMap.getAll("foo"), hashSet);
+        assertEquals(new HashSet<>(Arrays.asList("AAAA", "BBBB", "CCCC")), myHashMap.getAll("Foo"));
     }
 
     @Test
-    void remove_RemovesAllDuplicates() {
-        MyHashMap myHashMap = new MyHashMap();
-        myHashMap.put("foo", "AAAA");
-        myHashMap.put("foo", "BBBB");
-        myHashMap.put("foo", "CCCC");
-        myHashMap.remove("foo");
+    void remove_RemovesAllDuplicatesWithSameHashcode() {
+        MyHashMap<String, String> myHashMap = new MyHashMap<>();
+        myHashMap.put("Foo", "AAAA");
+        myHashMap.put("Foo", "BBBB");
+        myHashMap.put("Foo", "CCCC");
 
-        HashSet<String> hashSet = new HashSet<>();
-        // assertThat(myHashMap.size(), equalTo(0));
-        // assertEquals(myHashMap.size(), 0);
-        assertEquals(myHashMap.getAll("foo"), hashSet);
+        myHashMap.remove("Foo");
+        assertEquals(0, myHashMap.size());
     }
 
+    @Test
+    void put_HandlesHashCollisionsForDifferentStrings() {
+        // The Strings "Siblings" and "Teheran" has the same hashCode values
+        MyHashMap<String, String> myHashMap = new MyHashMap<>();
+        myHashMap.put("Siblings", "Oh no, a collision occurred! :-(");
+        myHashMap.put("Teheran", "Oh no, a collision occurred! :-(");
+
+        assertEquals(myHashMap.get("Siblings"), myHashMap.get("Teheran"));
+    }
 }

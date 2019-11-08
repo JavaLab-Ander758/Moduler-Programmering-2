@@ -52,24 +52,11 @@ public class MyHashMap<K extends Comparable, V extends Comparable> implements My
       table.set(index, new LinkedList<>());
     }
 
-
     // Add an entry (key, value) to hashTable[index]
-    //table.get(index).add(new Entry<>(key, value));
     table.get(index).add(new MyMap.Entry<K, V>(key, value));
     size++;
 
     return value;
-
-    /*
-    // Replace old value if key is a duplicate
-    if (get(key) != null) {
-      for (Entry<K, V> entry : entries()) {
-        V oldValue = entry.getValue();
-        entry.setValue(value);
-        return oldValue;
-      }
-    }
-    */
   }
 
   /** Remove the entries for the specified key */
@@ -81,13 +68,14 @@ public class MyHashMap<K extends Comparable, V extends Comparable> implements My
     LinkedList<Entry<K, V>> bucket = table.get(index);
 
     // If bucket is empty, return
-    if (bucket == null || bucket.size() == 0)
+    if (bucket == null)
       return;
 
     // Remove all instances of within this bucket
-    for (Entry<K, V> entry : bucket) {
-      if (entry.getKey().equals(key)) {
-        bucket.remove(entry);
+    Iterator<Entry<K, V>> iterator = bucket.iterator();
+    while (iterator.hasNext()) {
+      if (iterator.next().getKey().equals(key)) {
+        iterator.remove();
         size--;
       }
     }
@@ -177,19 +165,23 @@ public class MyHashMap<K extends Comparable, V extends Comparable> implements My
 
   @Override
   public Set<V> getAll(K key) {
+    // Create a new LinkedList and HashSet
     LinkedList<Entry<K, V>> list = table.get(hash(key.hashCode()));
     Set<V> set = new HashSet<>();
 
+    // If list is empty, return
     if (list == null) {
       return set;
     }
 
+    // Traverse list and add elements to HashSet
     for (Entry<K, V> entry : list) {
       if (entry.getKey().equals(key)) {
         set.add(entry.getValue());
       }
     }
 
+    // Return HashSet
     return set;
   }
 
