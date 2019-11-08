@@ -1,21 +1,24 @@
 class FizzBuzz {
 
     /**
-     * Returns specific String regarding number being dividable by 3, 5 or (3 AND 5)
-     * @param number Number to check for
-     * @return String to specify which case number is dividable for. Returns number as a String if no result.
+     * Returns "Fizz", "Buzz" or "FizzBuzz" if number is dividable by 3, 5, or both 3 and 5
+     * @param number Number to check
+     * @return String to specify which case number is dividable for. Returns number as String if no result
      */
-    String of(int number) {
-        if (number < 0)
-            throw new IllegalArgumentException(String.format("%s received as input, only numbers >= 0 is allowed!", number));
+    static String of(int number) {
+        if (number < 0) {
+            return "Input must be 0 or higher!";
+        }
+        if (number == 0) {
+            return "0";
+        }
 
-        if (number % 3 == 0 && number % 5 == 0)
-            return "fizzbuzz";
-        else if (number % 3 == 0)
-            return "fizz";
-        else if (number % 5 == 0)
-            return "buzz";
-        else
-            return Integer.toString(number);
+        String output = "";
+        if (number % 3 == 0)
+            output += "Fizz";
+        if (number % 5 == 0)
+            output += "Buzz";
+
+        return output.isEmpty() ? Integer.toString(number) : output;
     }
 }
