@@ -1,5 +1,3 @@
-package Graphs;
-
 public interface Graph<V> {
   /** Add a vertex to the graph */
   boolean addVertex(V vertex);

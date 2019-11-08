@@ -1,5 +1,3 @@
-package Graphs;
-
 public class Edge {
   private int u, v;
 
